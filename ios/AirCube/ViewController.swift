@@ -71,12 +71,7 @@ class ViewController: UIViewController {
     
     
     func setAirQuality(airQuality: String) {
-        switch airQuality {
-        case :
-            
-        default:
-            <#code#>
-        }
+        // TODO - Create AirQuality filter here.
     }
     
     
