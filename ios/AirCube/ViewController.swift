@@ -20,10 +20,14 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     
+        loadFromJSON()
         // Do any additional setup after loading the view, typically from a nib.
+        _ = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(loadFromJSON), userInfo: nil, repeats: true)
     }
     
     func loadFromJSON() -> [String] {
+        
+        
         
         print("Loading from JSON...")
         
@@ -50,6 +54,7 @@ class ViewController: UIViewController {
                             }
                             if let airQuality = feed["field3"] as? String {
                                 airQualities.append(airQuality)
+                                self.setAirQuality(airQuality: Double(airQuality)!)
                             }
                             
                         }
@@ -61,8 +66,7 @@ class ViewController: UIViewController {
                 print("Temperatures: \(temperatures) \nHumidites: \(humidities)\nAir quality: \(airQualities)")
                 self.temperatureLabel.text = "Lämpötila on \(temperatures[0])°C"
                 self.humidityLabel.text = "Ilmankosteus on \(humidities[0])%"
-                self.airQualityLabel.text = "Ilmanlaatu on \(airQualities[0])"
-                
+            
             }
             
             }.resume()
@@ -70,8 +74,20 @@ class ViewController: UIViewController {
     }
     
     
-    func setAirQuality(airQuality: String) {
+    func setAirQuality(airQuality: Double) {
         // TODO - Create AirQuality filter here.
+        
+        if (airQuality < 0.7) {
+            airQualityLabel.text = "Ilmanlaatu on loistava"
+        } else if (airQuality < 0.1) {
+            airQualityLabel.text = "Ilmanlaatu on hyvä"
+        } else if (airQuality < 0.15) {
+            airQualityLabel.text = "Ilmanlaatu on kohtalainen"
+        } else if (airQuality < 0.2) {
+                airQualityLabel.text = "Ilmanlaatu on huono"
+        } else if (airQuality < 0.3) {
+            airQualityLabel.text = "Ilmanlaatu on kauhea"
+        }
     }
     
     
