@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Kortti</title>
+    
+      <link href="https://fonts.googleapis.com/css?family=Nunito:300" rel="stylesheet">
+      
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
+     <link href="style.css" rel="stylesheet" type="text/css"/>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+      <script>
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                dataFromTS = JSON.parse(this.responseText);
+                document.getElementById("temperature").innerHTML = dataFromTS.feeds[0].field1 + "°C";
+                document.getElementById("humidity").innerHTML = dataFromTS.feeds[0].field2 + "%";;
+                document.getElementById("ppm").innerHTML = dataFromTS.feeds[0].field3 + " ppm";
+            }
+        };
+        xmlhttp.open("GET", "https://api.thingspeak.com/channels/180604/feeds.json?results=1", true);
+        xmlhttp.send();         
+      </script>
+      
+  </head>
+  <body class="container">
+      <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-xs-3">                      
+                        <div class="card" style="width: 18.75em;">
+                          <!--<img class="card-img-top" src="..." alt="Card image cap">-->
+                          <div class="card-block">
+                            <h4 class="card-title">Lämpötila</h4>
+                            <p class="card-text" id="temperature"></p>
+                          </div>
+                        </div>                       
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="card" style="width: 18.75em;">
+                          <div class="card-block">
+                            <h4 class="card-title">Ilmankosteus</h4>
+                            <p class="card-text" id="humidity"></p> 
+                          </div>
+                        </div>                          
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="card" style="width: 18.75em;">
+                          <div class="card-block">
+                            <h4 class="card-title">Ilmanlaatu</h4>
+                            <p class="card-text" id="ppm"></p>
+                          </div>
+                        </div>                          
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+
+  </body>
+
+</html>

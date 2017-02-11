@@ -1,0 +1,15 @@
+
+
+.container {
+    background-color: #eee;
+}
+
+.card {
+    margin: 20px;
+    font-family: 'Nunito', sans-serif;
+    height: 320px;
+    border-radius: 0px;
+    -webkit-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.5);
+    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.5);
+}
