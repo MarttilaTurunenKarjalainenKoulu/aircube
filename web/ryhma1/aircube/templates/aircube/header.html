@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Kotitaulu</title>
+
+      <link href="https://fonts.googleapis.com/css?family=Nunito:300" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
+     <link href="style.css" rel="stylesheet" type="text/css"/>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+      <script>
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                dataFromTS = JSON.parse(this.responseText);
+                document.getElementById("temperature").innerHTML = dataFromTS.feeds[0].field1 + "°C";
+                document.getElementById("humidity").innerHTML = "Ilmankosteus on " + dataFromTS.feeds[0].field2 + "%";;
+                document.getElementById("ppm").innerHTML = "Ilmanlaatu on " + dataFromTS.feeds[0].field3 + "ppm";
+            }
+        };
+        xmlhttp.open("GET", "https://api.thingspeak.com/channels/180604/feeds.json?results=1", true);
+        xmlhttp.send();
+      </script>
+      <script>
+          function startTime() {
+              var today = new Date();
+              var h = today.getHours();
+              var m = today.getMinutes();
+
+              m = checkTime(m);
+
+              document.getElementById('clock').innerHTML =
+                  h + "." + m;
+              var t = setTimeout(startTime, 500);
+          }
+          function checkTime(i) {
+              if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+        return i;
+          }
+      </script>
+
+  </head>
+  <body class="container" onload="startTime()">
+      <div id="clock"></div>
+      {% block content %}
+      {% end block %}
+
+
+  </body>
+
+</html>
