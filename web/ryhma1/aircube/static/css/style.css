@@ -1,17 +1,19 @@
 /**********************************
 GENERAL
 ***********************************/
+/*
+This would be needed if it would have made the Django way -- But it didn't work so...
 @font-face {
   font-family: 'Nunito', sans-serif;
   src: url('../fonts/Nunito-Light.ttf');
   src: local('../fonts/Nunito-Light.ttf');
-}
+}*/
 
 body {
     font-family: 'Nunito', sans-serif;
 
     /* Wallpaper */
-    background-image: url(img/Background.png);
+    background-image: url(../img/Background.png);
     background-attachment: fixed;
     background-position: center;
     background-repeat: no-repeat;
@@ -22,6 +24,11 @@ body {
 p {
     color: #4A4A4A;
     letter-spacing: 0,3px;
+}
+
+.wrapper {
+  width:100%;
+  margin:auto;
 }
 
 /**********************************
