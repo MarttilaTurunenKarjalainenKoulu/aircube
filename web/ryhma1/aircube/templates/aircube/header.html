@@ -11,13 +11,19 @@
 
     <title>Kotitaulu</title>
 
-      <link href="https://fonts.googleapis.com/css?family=Nunito:300" rel="stylesheet">
+    {% load staticfiles %}
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
 
-     <link href="style.css" rel="stylesheet" type="text/css"/>
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-      <script>
+
+    <!--<link href="https://fonts.googleapis.com/css?family=Nunito:300" rel="stylesheet"> -->
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css'  %}" type="stylesheet"/>
+    <link rel="stylesheet" href="{% static 'css/style.css'  %}" type="stylesheet"/>
+
+    <script type="javascript" src="{% static 'js/bootstrap.min.js'  %}"/>
+    <script type="javascript" src="{% static 'js/clock.js'  %}"/>
+    <script type="javascript" src="{% static 'jsonparser/clock.js'  %}"/>
+      <script>/*
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
@@ -28,10 +34,10 @@
             }
         };
         xmlhttp.open("GET", "https://api.thingspeak.com/channels/180604/feeds.json?results=1", true);
-        xmlhttp.send();
+        xmlhttp.send();*/
       </script>
       <script>
-          function startTime() {
+      /*    function startTime() {
               var today = new Date();
               var h = today.getHours();
               var m = today.getMinutes();
@@ -45,7 +51,7 @@
           function checkTime(i) {
               if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
         return i;
-          }
+      }*/
       </script>
 
   </head>
