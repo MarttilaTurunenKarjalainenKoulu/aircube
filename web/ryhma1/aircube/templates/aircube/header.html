@@ -29,8 +29,11 @@
       var airqArray = [];
       var timeArray = [];
 
+      var humIntArray=[];
+      var tempIntArray=[];
+      var airqIntArray=[];
 
-
+      loadJsonData();
       function loadJsonData() {
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function() {
@@ -38,61 +41,24 @@
                 dataFromTS = JSON.parse(this.responseText);
 
                 for(i = 0; i < 5; i++) {
-                    tempArray[0] = dataFromTS.feeds[0].field1;
-                    humArray[0] = dataFromTS.feeds[0].field2;
-                    airqArray[0] = dataFromTS.feeds[0].field3;
-                    timeArray[0] = dataFromTS.feeds[0].created_at;
+                    tempArray[i] = dataFromTS.feeds[i].field1;
+                    humArray[i] = dataFromTS.feeds[i].field2;
+                    airqArray[i] = dataFromTS.feeds[i].field3;
+                    timeArray[i] = dataFromTS.feeds[i].created_at;
 
-
+                    humIntArray[i] = parseInt(humArray[i]);
+                    tempIntArray[i] = parseInt(tempArray[i]);
+                    airqIntArray[i] = parseInt(airqArray[i]);
                 }
                 document.getElementById("temperature").innerHTML = dataFromTS.feeds[4].field1 + "°C";
                 document.getElementById("humidity").innerHTML = "Ilmankosteus on " + dataFromTS.feeds[4].field2 + "%";
                 document.getElementById("ppm").innerHTML = "Ilmanlaatu on " + dataFromTS.feeds[4].field3 + "ppm";
-                document.getElementById("time").innerHTML = "Time on " + dataFromTS.feeds[4].created_at + " klo";
-                document.getElementById("testi").innerHTML = parseInt(humArray[0]);
             }
         };
         xmlhttp.open("GET", "https://api.thingspeak.com/channels/180604/feeds.json?results=5", true);
         xmlhttp.send();
         var t = setTimeout(loadJsonData, 500);
     }
-
-    var data1 = parseInt(humArray[0]);
-    var data2 = 23;
-    var data3 = 23;
-    var data4 = 25;
-    var data5 = 1;
-
-      </script>
-
-      <script>
-      /*
-      function loadFiveJsonData() {
-        var tempArray = [];
-        var humArray = [];
-        var airqArray = [];
-        var timeArray = [];
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                dataFromTS = JSON.parse(this.responseText);
-                for(i = 0; i == 4; i++) {
-                    tempArray.push(dataFromTS.feeds[i].field1);
-                    humArray.push(dataFromTS.feeds[i].field2);
-                    airqArray.push(dataFromTS.feeds[i].field3);
-                    timeArray.push(dataFromTS.feeds[i].created_at);
-                }
-                document.getElementById("testi").innerHTML = tempArray[0];
-            }
-        xmlhttp.open("GET", "https://api.thingspeak.com/channels/180604/feeds.json?results=5", true);
-        xmlhttp.send();
-        var t = setTimeout(loadFiveJsonData, 500);
-        }
-    }*/
-      </script>
-
-      <script>
-
 
       function drawCharts() {
         // Load Charts and the corechart package.
@@ -116,11 +82,11 @@
             data.addColumn('number', 'Time');
             data.addColumn('number', 'Humidity');
             data.addRows([
-                [1, data1],
-                [2, data2],
-                [3, data3],
-                [4, data4],
-                [5, data5]
+                [1, humIntArray[0]],
+                [2, humIntArray[1]],
+                [3, humIntArray[2]],
+                [4, humIntArray[3]],
+                [5, humIntArray[4]]
             ]);
 
             // Set options for Humidity chart.
@@ -130,31 +96,6 @@
             var chart = new google.visualization.LineChart(document.getElementById('Hum_chart_div'));
             chart.draw(data, options);
         }
-
-        /*
-        // Callback that draws the pie chart for Humidity.
-        function drawHumChart() {
-
-            // Create the data table for Humidity
-            var data = new google.visualization.DataTable();
-            data.addColumn('number', 'Time');
-            data.addColumn('number', 'Humidity');
-            data.addRows([
-              [1, 21],
-              [2, 22],
-              [3, 23],
-              [4, 22],
-              [5, 23]
-            ]);
-
-            // Set options for Humidity chart.
-            var options = {title:'Humidity over Time'};
-
-            // Instantiate and draw the chart for Humidity.
-            var chart = new google.visualization.LineChart(document.getElementById('Hum_chart_div'));
-            chart.draw(data, options);
-        }
-        */
 
         // Callback that draws the pie chart for Temperature.
         function drawTempChart() {
@@ -164,11 +105,11 @@
             data.addColumn('number', 'Time');
             data.addColumn('number', 'Temperature');
             data.addRows([
-              [1, 21],
-              [2, 21],
-              [3, 23],
-              [4, 22],
-              [5, 21]
+                [1, tempIntArray[0]],
+                [2, tempIntArray[1]],
+                [3, tempIntArray[2]],
+                [4, tempIntArray[3]],
+                [5, tempIntArray[4]]
             ]);
 
             // Set options for Temperature chart.
@@ -187,11 +128,11 @@
             data.addColumn('number', 'Time');
             data.addColumn('number', 'Airquality');
             data.addRows([
-              [1, 21],
-              [2, 21],
-              [3, 23],
-              [4, 22],
-              [5, 21]
+                [1, airqIntArray[0]],
+                [2, airqIntArray[1]],
+                [3, airqIntArray[2]],
+                [4, airqIntArray[3]],
+                [5, airqIntArray[4]]
             ]);
 
             // Set options for Temperature chart.
@@ -202,9 +143,6 @@
             chart.draw(data, options);
         }
       }
-      </script>
-
-      <script>
           function startTime() {
               var today = new Date();
               var h = today.getHours();
@@ -223,10 +161,7 @@
       </script>
       <!-- GRAPH SCRIPTS -->
        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
-
     <script>
-
     //click card to show chart div
     $(document).ready( function() {
         $( "#Temp_chart_div" ).hide();
@@ -259,8 +194,6 @@
       <div class="row">
         <div class="col-md-12">
           <div id="clock"></div>
-          <p id="time"></p>
-          <p id="testi"></p>
           {% block content %}
           {% endblock %}
         </div>
