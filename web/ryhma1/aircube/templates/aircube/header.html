@@ -18,11 +18,12 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css'  %}" type="text/css"/>
     <link rel="stylesheet" href="{% static 'css/style.css'  %}" type="text/css"/>
 
-    <script type="javascript" src="{% static 'js/bootstrap.min.js'  %}"/>
-    <!--<script type="javascript" src="{% static 'js/clock.js'  %}"/>
+    <!--<script type="javascript" src="{% static 'js/bootstrap.min.js'  %}"/>
+    <script type="javascript" src="{% static 'js/clock.js'  %}"/>
     <script type="javascript" src="{% static 'jsonparser/clock.js'  %}"/>-->
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
       <script>
+      function loadJsonData() {
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
@@ -34,7 +35,120 @@
         };
         xmlhttp.open("GET", "https://api.thingspeak.com/channels/180604/feeds.json?results=1", true);
         xmlhttp.send();
+        var t = setTimeout(loadJsonData, 500);
+      }
       </script>
+
+      <script>
+      function drawCharts() {
+        // Load Charts and the corechart package.
+        google.charts.load('current', {'packages':['corechart']});
+
+        // Draw the chart for Humidity when Charts is loaded.
+        google.charts.setOnLoadCallback(drawHumChart);
+
+        // Draw the chart for the Temperature when Charts is loaded.
+        google.charts.setOnLoadCallback(drawTempChart);
+
+        // Draw the chart for the Airquality when Charts is loaded.
+        google.charts.setOnLoadCallback(drawAirqualityChart);
+
+        // Callback that draws the pie chart for Humidity.
+        function drawHumChart() {
+
+            // Create the data table for Humidity
+            var data = new google.visualization.DataTable();
+            data.addColumn('number', 'Time');
+            data.addColumn('number', 'Humidity');
+            data.addRows([
+              [1, 21],
+              [2, 22],
+              [3, 23],
+              [4, 22],
+              [5, 23]
+            ]);
+
+            // Set options for Humidity chart.
+            var options = {title:'Humidity over Time'};
+
+            // Instantiate and draw the chart for Humidity.
+            var chart = new google.visualization.LineChart(document.getElementById('Hum_chart_div'));
+            chart.draw(data, options);
+        }
+
+        /*
+        // Callback that draws the pie chart for Humidity.
+        function drawHumChart() {
+
+            // Create the data table for Humidity
+            var data = new google.visualization.DataTable();
+            data.addColumn('number', 'Time');
+            data.addColumn('number', 'Humidity');
+            data.addRows([
+              [1, 21],
+              [2, 22],
+              [3, 23],
+              [4, 22],
+              [5, 23]
+            ]);
+
+            // Set options for Humidity chart.
+            var options = {title:'Humidity over Time'};
+
+            // Instantiate and draw the chart for Humidity.
+            var chart = new google.visualization.LineChart(document.getElementById('Hum_chart_div'));
+            chart.draw(data, options);
+        }
+        */
+
+        // Callback that draws the pie chart for Temperature.
+        function drawTempChart() {
+
+            // Create the data table for Temperature.
+            var data = new google.visualization.DataTable();
+            data.addColumn('number', 'Time');
+            data.addColumn('number', 'Temperature');
+            data.addRows([
+              [1, 21],
+              [2, 21],
+              [3, 23],
+              [4, 22],
+              [5, 21]
+            ]);
+
+            // Set options for Temperature chart.
+            var options = {title:'Temperature over time'};
+
+            // Instantiate and draw the chart for Temperature.
+            var chart = new google.visualization.LineChart(document.getElementById('Temp_chart_div'));
+            chart.draw(data, options);
+        }
+
+        // Callback that draws the pie chart for Airquality.
+        function drawAirqualityChart() {
+
+            // Create the data table for Temperature.
+            var data = new google.visualization.DataTable();
+            data.addColumn('number', 'Time');
+            data.addColumn('number', 'Airquality');
+            data.addRows([
+              [1, 21],
+              [2, 21],
+              [3, 23],
+              [4, 22],
+              [5, 21]
+            ]);
+
+            // Set options for Temperature chart.
+            var options = {title:'Airquality over time'};
+
+            // Instantiate and draw the chart for Temperature.
+            var chart = new google.visualization.LineChart(document.getElementById('Airquality_chart_div'));
+            chart.draw(data, options);
+        }
+      }
+      </script>
+
       <script>
           function startTime() {
               var today = new Date();
@@ -52,9 +166,11 @@
         return i;
       }
       </script>
+      <!-- GRAPH SCRIPTS -->
+       <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
   </head>
-  <body class="container" onload="startTime()">
+  <body class="container" onload="startTime(); loadJsonData(); drawCharts();">
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
