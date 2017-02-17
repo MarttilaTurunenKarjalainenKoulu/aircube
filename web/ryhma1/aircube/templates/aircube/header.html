@@ -66,32 +66,6 @@
 
         // Draw the chart for the Airquality when Charts is loaded.
         google.charts.setOnLoadCallback(drawAirqualityChart);
-        
-
-        /*
-        // Callback that draws the pie chart for Humidity.
-        function drawHumChart() {
-
-            // Create the data table for Humidity
-            var data = new google.visualization.DataTable();
-            data.addColumn('number', 'Time');
-            data.addColumn('number', 'Humidity');
-            data.addRows([
-              [1, 21],
-              [2, 22],
-              [3, 23],
-              [4, 22],
-              [5, 23]
-            ]);
-
-            // Set options for Humidity chart.
-            var options = {title:'Humidity over Time'};
-
-            // Instantiate and draw the chart for Humidity.
-            var chart = new google.visualization.LineChart(document.getElementById('Hum_chart_div'));
-            chart.draw(data, options);
-        }
-        */
           
         // Callback that draws the pie chart for Humidity.
         function drawHumChart() {
