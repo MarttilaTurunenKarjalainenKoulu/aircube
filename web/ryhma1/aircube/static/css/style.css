@@ -53,6 +53,10 @@ CARDS
     text-transform: capitalize;
 }
 
+.card-text {
+    margin-bottom: 0px;
+}
+
 /**********************************
 CLOCK
 ***********************************/
