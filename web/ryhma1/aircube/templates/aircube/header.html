@@ -33,6 +33,7 @@
       var tempIntArray=[];
       var airqIntArray=[];
 
+
       loadJsonData();
       function loadJsonData() {
         var xmlhttp = new XMLHttpRequest();
@@ -52,12 +53,29 @@
                 }
                 document.getElementById("temperature").innerHTML = dataFromTS.feeds[4].field1 + "°C";
                 document.getElementById("humidity").innerHTML = "Ilmankosteus on " + dataFromTS.feeds[4].field2 + "%";
-                document.getElementById("ppm").innerHTML = "Ilmanlaatu on " + dataFromTS.feeds[4].field3 + "ppm";
+
+                airQuality = parseFloat(dataFromTS.feeds[4].field3);
+
+                if (airQuality <= 0.06) {
+                    document.getElementById("ppm").innerHTML = "Ilmanlaatu on loistava."
+                } else if (airQuality <= 0.1 && airQuality >= 0.06) {
+                    document.getElementById("ppm").innerHTML = "Ilmanlaatu on hyvä."
+                } else if (airQuality <= 0.15 && airQuality >= 0.1) {
+                    document.getElementById("ppm").innerHTML = "Ilmanlaatu on ok."
+                } else if (airQuality <= 0.2 && airQuality >= 0.15) {
+                    document.getElementById("ppm").innerHTML = "Ilmanlaatu on huono."
+                } else if (airQuality >= 0.15) {
+                    document.getElementById("ppm").innerHTML = "Ilmanlaatu on vaarallisen huono. Poistu tilasta välittömästä."
+                }
+
+                //document.getElementById("ppm").innerHTML = "Ilmanlaatu on " + dataFromTS.feeds[4].field3 + "ppm";
             }
         };
         xmlhttp.open("GET", "https://api.thingspeak.com/channels/180604/feeds.json?results=5", true);
         xmlhttp.send();
-        var t = setTimeout(loadJsonData, 500);
+        var t = setTimeout(loadJsonData, 5000);
+
+        drawCharts();
     }
 
       function drawCharts() {
@@ -90,10 +108,32 @@
             ]);
 
             // Set options for Humidity chart.
-            var options = {title:'Humidity over Time'};
+            //var options = {title:'Humidity over Time'};
+
+            var options = {
+                legend: 'none',
+                chartArea: {left: 10, right: 10, top: 20, bottom: 10, width: '100%', height: '100%'},
+                backgroundColor: 'transparent',
+                colors: ['#3B7CEC'],
+                curveType: 'function',
+                pointShape: 'cicrle',
+                pointSize: 10,
+                vAxis: {
+                    textPosition: 'none',
+                    gridlines: {
+                        color: 'transparent'
+                    }
+                },
+                hAxis: {
+                    textPosition: 'none',
+                    gridlines: {
+                        color: 'transparent'
+                    }
+                },
+            };
 
             // Instantiate and draw the chart for Humidity.
-            var chart = new google.visualization.LineChart(document.getElementById('Hum_chart_div'));
+            var chart = new google.visualization.ColumnChart(document.getElementById('Hum_chart_div'));
             chart.draw(data, options);
         }
 
@@ -113,7 +153,29 @@
             ]);
 
             // Set options for Temperature chart.
-            var options = {title:'Temperature over time'};
+            //var options = {title:'Temperature over time'};
+
+            var options = {
+                legend: 'none',
+                chartArea: {left: 10, right: 10, top: 20, bottom: 10, width: '100%', height: '100%'},
+                backgroundColor: 'transparent',
+                colors: ['#EC813B'],
+                curveType: 'function',
+                pointShape: 'cicrle',
+                pointSize: 10,
+                vAxis: {
+                    textPosition: 'none',
+                    gridlines: {
+                        color: 'transparent'
+                    }
+                },
+                hAxis: {
+                    textPosition: 'none',
+                    gridlines: {
+                        color: 'transparent'
+                    }
+                },
+            };
 
             // Instantiate and draw the chart for Temperature.
             var chart = new google.visualization.LineChart(document.getElementById('Temp_chart_div'));
@@ -122,6 +184,35 @@
 
         // Callback that draws the pie chart for Airquality.
         function drawAirqualityChart() {
+
+                    // Create the data table for Airquality.
+                    var data = new google.visualization.arrayToDataTable([
+                        ['Name', 'Amount'],
+                        ['Typpi', 78.08],
+                        ['Happi', 20.94],
+                        ['Epäpuhtaudet', 0.9]
+                    ]);
+
+                    // Set options for Airquality chart.
+                    var options = {
+                        legend: 'none',
+                        chartArea: {top: 20, bottom: 10, width: '100%', height: '100%'},
+                        textPosition: 'none',
+                        pieSliceText: 'none',
+                        backgroundColor: 'transparent',
+                        colors: ['#EC3BC8'],
+                        pieHole: 0.4,
+
+                    };
+
+                    // Instantiate and draw the chart for Airquality.
+                    var chart = new google.visualization.PieChart(document.getElementById('Airquality_chart_div'));
+                    chart.draw(data, options);
+                }
+
+
+
+        /*function drawAirqualityChart() {
 
             // Create the data table for Temperature.
             var data = new google.visualization.DataTable();
@@ -141,8 +232,8 @@
             // Instantiate and draw the chart for Temperature.
             var chart = new google.visualization.LineChart(document.getElementById('Airquality_chart_div'));
             chart.draw(data, options);
-        }
-      }
+        }*/
+    }
           function startTime() {
               var today = new Date();
               var h = today.getHours();
@@ -167,6 +258,7 @@
         $( "#Temp_chart_div" ).hide();
         $("#temp-card").click(function () {
             $( "#Temp_chart_div" ).slideToggle( "fast", function() {
+                drawCharts();
             });
         });
     });
@@ -175,6 +267,7 @@
         $( "#Hum_chart_div" ).hide();
         $("#hum-card").click(function () {
             $( "#Hum_chart_div" ).slideToggle( "fast", function() {
+                drawCharts();
             });
         });
     });
@@ -183,13 +276,14 @@
         $( "#Airquality_chart_div" ).hide();
         $("#airquality-card").click(function () {
             $( "#Airquality_chart_div" ).slideToggle( "fast", function() {
+                drawCharts();
             });
         });
     });
     </script>
 
   </head>
-  <body class="container" onload="startTime(); loadJsonData(); drawCharts(); loadFiveJsonData();">
+  <body class="container" onload="startTime(); loadJsonData();">
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
