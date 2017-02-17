@@ -22,24 +22,78 @@
     <script type="javascript" src="{% static 'js/clock.js'  %}"/>
     <script type="javascript" src="{% static 'jsonparser/clock.js'  %}"/>-->
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
       <script>
+      var tempArray = [];
+      var humArray = [];
+      var airqArray = [];
+      var timeArray = [];
+
+
+
       function loadJsonData() {
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 dataFromTS = JSON.parse(this.responseText);
-                document.getElementById("temperature").innerHTML = dataFromTS.feeds[0].field1 + "°C";
-                document.getElementById("humidity").innerHTML = "Ilmankosteus on " + dataFromTS.feeds[0].field2 + "%";;
-                document.getElementById("ppm").innerHTML = "Ilmanlaatu on " + dataFromTS.feeds[0].field3 + "ppm";
+
+                for(i = 0; i < 5; i++) {
+                    tempArray[0] = dataFromTS.feeds[0].field1;
+                    humArray[0] = dataFromTS.feeds[0].field2;
+                    airqArray[0] = dataFromTS.feeds[0].field3;
+                    timeArray[0] = dataFromTS.feeds[0].created_at;
+
+
+                }
+                document.getElementById("temperature").innerHTML = dataFromTS.feeds[4].field1 + "°C";
+                document.getElementById("humidity").innerHTML = "Ilmankosteus on " + dataFromTS.feeds[4].field2 + "%";
+                document.getElementById("ppm").innerHTML = "Ilmanlaatu on " + dataFromTS.feeds[4].field3 + "ppm";
+                document.getElementById("time").innerHTML = "Time on " + dataFromTS.feeds[4].created_at + " klo";
+                document.getElementById("testi").innerHTML = parseInt(humArray[0]);
             }
         };
-        xmlhttp.open("GET", "https://api.thingspeak.com/channels/180604/feeds.json?results=1", true);
+        xmlhttp.open("GET", "https://api.thingspeak.com/channels/180604/feeds.json?results=5", true);
         xmlhttp.send();
         var t = setTimeout(loadJsonData, 500);
-      }
+    }
+
+    var data1 = parseInt(humArray[0]);
+    var data2 = 23;
+    var data3 = 23;
+    var data4 = 25;
+    var data5 = 1;
+
       </script>
 
       <script>
+      /*
+      function loadFiveJsonData() {
+        var tempArray = [];
+        var humArray = [];
+        var airqArray = [];
+        var timeArray = [];
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                dataFromTS = JSON.parse(this.responseText);
+                for(i = 0; i == 4; i++) {
+                    tempArray.push(dataFromTS.feeds[i].field1);
+                    humArray.push(dataFromTS.feeds[i].field2);
+                    airqArray.push(dataFromTS.feeds[i].field3);
+                    timeArray.push(dataFromTS.feeds[i].created_at);
+                }
+                document.getElementById("testi").innerHTML = tempArray[0];
+            }
+        xmlhttp.open("GET", "https://api.thingspeak.com/channels/180604/feeds.json?results=5", true);
+        xmlhttp.send();
+        var t = setTimeout(loadFiveJsonData, 500);
+        }
+    }*/
+      </script>
+
+      <script>
+
+
       function drawCharts() {
         // Load Charts and the corechart package.
         google.charts.load('current', {'packages':['corechart']});
@@ -58,14 +112,15 @@
 
             // Create the data table for Humidity
             var data = new google.visualization.DataTable();
+
             data.addColumn('number', 'Time');
             data.addColumn('number', 'Humidity');
             data.addRows([
-              [1, 21],
-              [2, 22],
-              [3, 23],
-              [4, 22],
-              [5, 23]
+                [1, data1],
+                [2, data2],
+                [3, data3],
+                [4, data4],
+                [5, data5]
             ]);
 
             // Set options for Humidity chart.
@@ -169,12 +224,43 @@
       <!-- GRAPH SCRIPTS -->
        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
+
+    <script>
+
+    //click card to show chart div
+    $(document).ready( function() {
+        $( "#Temp_chart_div" ).hide();
+        $("#temp-card").click(function () {
+            $( "#Temp_chart_div" ).slideToggle( "fast", function() {
+            });
+        });
+    });
+
+    $(document).ready( function() {
+        $( "#Hum_chart_div" ).hide();
+        $("#hum-card").click(function () {
+            $( "#Hum_chart_div" ).slideToggle( "fast", function() {
+            });
+        });
+    });
+
+    $(document).ready( function() {
+        $( "#Airquality_chart_div" ).hide();
+        $("#airquality-card").click(function () {
+            $( "#Airquality_chart_div" ).slideToggle( "fast", function() {
+            });
+        });
+    });
+    </script>
+
   </head>
-  <body class="container" onload="startTime(); loadJsonData(); drawCharts();">
+  <body class="container" onload="startTime(); loadJsonData(); drawCharts(); loadFiveJsonData();">
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
           <div id="clock"></div>
+          <p id="time"></p>
+          <p id="testi"></p>
           {% block content %}
           {% endblock %}
         </div>
