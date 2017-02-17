@@ -1,0 +1,69 @@
+/**********************************
+GENERAL
+***********************************/
+/*
+This would be needed if it would have made the Django way -- But it didn't work so...
+@font-face {
+  font-family: 'Nunito', sans-serif;
+  src: url('../fonts/Nunito-Light.ttf');
+  src: local('../fonts/Nunito-Light.ttf');
+}*/
+
+body {
+    font-family: 'Nunito', sans-serif;
+
+    /* Wallpaper */
+    background-image: url(../img/Background.png);
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+}
+
+p {
+    color: #4A4A4A;
+    letter-spacing: 0,3px;
+}
+
+.wrapper {
+  width:100%;
+  margin:auto;
+}
+
+/**********************************
+CARDS
+***********************************/
+
+.container {
+    width: 100%;
+    text-align: center;
+}
+
+.card {
+    box-sizing: border-box;
+    margin: 20px;
+    width: 18em;
+    height: inherit;
+    display: inline-block;
+    -webkit-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.5);
+    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.5);
+}
+
+.card-title {
+    font-size: 24px;
+    letter-spacing: 0,7px;
+    text-transform: capitalize;
+}
+
+/**********************************
+CLOCK
+***********************************/
+
+#clock {
+    margin: 10px;
+    text-align: center;
+    color: white;
+    font-size: 18px;
+}

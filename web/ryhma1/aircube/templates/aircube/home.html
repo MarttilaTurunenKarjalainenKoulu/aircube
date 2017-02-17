@@ -1,0 +1,39 @@
+{% extends "aircube/header.html" %}
+{% block content %}
+<div class="container-fluid">
+ <div class="center">
+  <div class="row">
+      <div class="col-md-12">
+          <div class="row">
+              <div class="col-xs-3">
+                  <div class="card">
+                    <!--<img class="card-img-top" src="..." alt="Card image cap">-->
+                    <div class="card-block">
+                      <h4 class="card-title" style="color: #EC813B">LÄMPÖTILA</h4>
+                      <p class="card-text" id="temperature"></p>
+                    </div>
+                  </div>
+              </div>
+              <div class="col-xs-3">
+                  <div class="card">
+                    <div class="card-block">
+                      <h4 class="card-title"  style="color: #3B7CEC">KOSTEUS</h4>
+                      <p class="card-text" id="humidity"></p>
+                    </div>
+                  </div>
+              </div>
+              <div class="col-xs-3">
+                  <div class="card">
+                    <div class="card-block">
+                      <h4 class="card-title"  style="color: #EC3BC8">LAATU</h4>
+                      <p class="card-text" id="ppm"></p>
+                    </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
