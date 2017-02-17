@@ -55,11 +55,14 @@
 
   </head>
   <body class="container" onload="startTime()">
-    <div class="wrapper">
-      <div id="clock"></div>
-      {% block content %}
-      {% endblock %}
-
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div id="clock"></div>
+          {% block content %}
+          {% endblock %}
+        </div>
+      </div>
     </div>
 
 

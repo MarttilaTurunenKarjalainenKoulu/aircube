@@ -26,11 +26,6 @@ p {
     letter-spacing: 0,3px;
 }
 
-.wrapper {
-  width:100%;
-  margin:auto;
-}
-
 /**********************************
 CARDS
 ***********************************/
@@ -38,6 +33,7 @@ CARDS
 .container {
     width: 100%;
     text-align: center;
+    display: flex;
 }
 
 .card {
