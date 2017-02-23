@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Kotitaulu</title>
+
+    {% load staticfiles %}
+
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css'  %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'css/style.css'  %}" type="text/css"/>
+
+    <!--<script type="javascript" src="{% static 'js/bootstrap.min.js'  %}"/>
+    <script type="javascript" src="{% static 'js/clock.js'  %}"/>
+    <script type="javascript" src="{% static 'jsonparser/clock.js'  %}"/>-->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+      <script>
+      var tempArray = [];
+      var humArray = [];
+      var airqArray = [];
+      var timeArray = [];
+
+      var humIntArray=[];
+      var tempIntArray=[];
+      var airqIntArray=[];
+
+      loadJsonData();
+      function loadJsonData() {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                dataFromTS = JSON.parse(this.responseText);
+
+                for(i = 0; i < 5; i++) {
+                    tempArray[i] = dataFromTS.feeds[i].field1;
+                    humArray[i] = dataFromTS.feeds[i].field2;
+                    airqArray[i] = dataFromTS.feeds[i].field3;
+                    timeArray[i] = new Date(dataFromTS.feeds[i].created_at);
+                    /*
+                    timeArray[i] = timeArray[i].replace('T', ' ');
+                    timeArray[i] = timeArray[i].replace('Z', ' ');
+                    //2017-02-23T07:33:41Z example data*/
+                    humIntArray[i] = parseInt(humArray[i]);
+                    tempIntArray[i] = parseInt(tempArray[i]);
+                    airqIntArray[i] = parseInt(airqArray[i]);
+                }
+
+
+                document.getElementById("temperature").innerHTML = dataFromTS.feeds[4].field1 + "°C";
+                document.getElementById("humidity").innerHTML = "Ilmankosteus on " + dataFromTS.feeds[4].field2 + "%";
+
+                airQuality = parseFloat(dataFromTS.feeds[4].field3);
+
+                if (airQuality <= 0.06) {
+                    document.getElementById("ppm").innerHTML = "Ilmanlaatu on loistava."
+                } else if (airQuality <= 0.1 && airQuality >= 0.06) {
+                    document.getElementById("ppm").innerHTML = "Ilmanlaatu on hyvä."
+                } else if (airQuality <= 0.15 && airQuality >= 0.1) {
+                    document.getElementById("ppm").innerHTML = "Ilmanlaatu on ok."
+                } else if (airQuality <= 0.2 && airQuality >= 0.15) {
+                    document.getElementById("ppm").innerHTML = "Ilmanlaatu on huono."
+                } else if (airQuality >= 0.15) {
+                    document.getElementById("ppm").innerHTML = "Ilmanlaatu on vaarallisen huono. Poistu tilasta välittömästä."
+                }
+
+                //document.getElementById("ppm").innerHTML = "Ilmanlaatu on " + dataFromTS.feeds[4].field3 + "ppm";
+            }
+        };
+        xmlhttp.open("GET", "https://api.thingspeak.com/channels/180604/feeds.json?results=5", true);
+        xmlhttp.send();
+        var t = setTimeout(loadJsonData, 5000);
+
+        //drawCharts();
+    }
+
+      function drawCharts() {
+        // Load Charts and the corechart package.
+        google.charts.load('current', {'packages':['corechart']});
+
+        // Draw the chart for Humidity when Charts is loaded.
+        google.charts.setOnLoadCallback(drawHumChart);
+
+        // Draw the chart for the Temperature when Charts is loaded.
+        google.charts.setOnLoadCallback(drawTempChart);
+
+        // Draw the chart for the Airquality when Charts is loaded.
+        google.charts.setOnLoadCallback(drawAirqualityChart);
+
+        // Callback that draws the pie chart for Humidity.
+        function drawHumChart() {
+
+            // Create the data table for Humidity
+            var data = new google.visualization.DataTable();
+
+            data.addColumn('datetime', 'Time');
+            data.addColumn('number', 'Humidity');
+            data.addRows([
+                [timeArray[0], humIntArray[0]],
+                [timeArray[1], humIntArray[1]],
+                [timeArray[2], humIntArray[2]],
+                [timeArray[3], humIntArray[3]],
+                [timeArray[4], humIntArray[4]]
+            ]);
+
+            // Set options for Humidity chart.
+            //var options = {title:'Humidity over Time'};
+
+            var options = {
+                legend: 'none',
+                chartArea: {left: 10, right: 10, top: 20, bottom: 10, width: '10', height: '100%'},
+                backgroundColor: 'transparent',
+                colors: ['#3B7CEC'],
+                curveType: 'function',
+                pointShape: 'cicrle',
+                pointSize: 10,
+                vAxis: {
+                    textPosition: 'none',
+                    gridlines: {
+                        color: 'transparent'
+                    }
+                },
+                hAxis: {
+                    textPosition: 'none',
+                    gridlines: {
+                        color: 'transparent'
+                    }
+                },
+            };
+
+            // Instantiate and draw the chart for Humidity.
+            var chart = new google.visualization.ColumnChart(document.getElementById('Hum_chart_div'));
+            chart.draw(data, options);
+        }
+
+        // Callback that draws the pie chart for Temperature.
+        function drawTempChart() {
+
+            // Create the data table for Temperature.
+            var data = new google.visualization.DataTable();
+            data.addColumn('datetime', 'Time');
+            data.addColumn('number', 'Temperature');
+            data.addRows([
+                [timeArray[0], tempIntArray[0]],
+                [timeArray[1], tempIntArray[1]],
+                [timeArray[2], tempIntArray[2]],
+                [timeArray[3], tempIntArray[3]],
+                [timeArray[4], tempIntArray[4]]
+            ]);
+
+            // Set options for Temperature chart.
+            //var options = {title:'Temperature over time'};
+
+            var options = {
+                legend: 'none',
+                chartArea: {left: 10, right: 10, top: 20, bottom: 10, width: '100%', height: '100%'},
+                backgroundColor: 'transparent',
+                colors: ['#EC813B'],
+                curveType: 'function',
+                pointShape: 'cicrle',
+                pointSize: 10,
+                vAxis: {
+                    textPosition: 'none',
+                    gridlines: {
+                        color: 'transparent'
+                    }
+                },
+                hAxis: {
+                    textPosition: 'none',
+                    gridlines: {
+                        color: 'transparent'
+                    }
+                },
+            };
+
+            // Instantiate and draw the chart for Temperature.
+            var chart = new google.visualization.LineChart(document.getElementById('Temp_chart_div'));
+            chart.draw(data, options);
+        }
+
+        // Callback that draws the pie chart for Airquality.
+        function drawAirqualityChart() {
+
+                    // Create the data table for Airquality.
+                    var data = new google.visualization.arrayToDataTable([
+                        ['Name', 'Amount'],
+                        ['Typpi', 78.08],
+                        ['Happi', 20.94],
+                        ['Epäpuhtaudet', 0.9]
+                    ]);
+
+                    // Set options for Airquality chart.
+                    var options = {
+                        legend: 'none',
+                        chartArea: {top: 20, bottom: 10, width: '100%', height: '100%'},
+                        textPosition: 'none',
+                        pieSliceText: 'none',
+                        backgroundColor: 'transparent',
+                        colors: ['#EC3BC8'],
+                        pieHole: 0.4,
+
+                    };
+
+                    // Instantiate and draw the chart for Airquality.
+                    var chart = new google.visualization.PieChart(document.getElementById('Airquality_chart_div'));
+                    chart.draw(data, options);
+                }
+
+
+
+        /*function drawAirqualityChart() {
+
+            // Create the data table for Temperature.
+            var data = new google.visualization.DataTable();
+            data.addColumn('number', 'Time');
+            data.addColumn('number', 'Airquality');
+            data.addRows([
+                [1, airqIntArray[0]],
+                [2, airqIntArray[1]],
+                [3, airqIntArray[2]],
+                [4, airqIntArray[3]],
+                [5, airqIntArray[4]]
+            ]);
+
+            // Set options for Temperature chart.
+            var options = {title:'Airquality over time'};
+
+            // Instantiate and draw the chart for Temperature.
+            var chart = new google.visualization.LineChart(document.getElementById('Airquality_chart_div'));
+            chart.draw(data, options);
+        }*/
+    }
+          function startTime() {
+              var today = new Date();
+              var h = today.getHours();
+              var m = today.getMinutes();
+
+              m = checkTime(m);
+
+              document.getElementById('clock').innerHTML =
+                  h + "." + m;
+              var t = setTimeout(startTime, 500);
+          }
+          function checkTime(i) {
+              if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+        return i;
+      }
+      </script>
+      <!-- GRAPH SCRIPTS -->
+       <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+    //click card to show chart div
+    $(document).ready( function() {
+        $( "#Temp_chart_div" ).hide();
+        $("#temp-card").click(function () {
+            $( "#Temp_chart_div" ).slideToggle( "fast", function() {
+                drawCharts();
+            });
+        });
+    });
+
+    $(document).ready( function() {
+        $( "#Hum_chart_div" ).hide();
+        $("#hum-card").click(function () {
+            $( "#Hum_chart_div" ).slideToggle( "fast", function() {
+                drawCharts();
+            });
+        });
+    });
+
+    $(document).ready( function() {
+        $( "#Airquality_chart_div" ).hide();
+        $("#airquality-card").click(function () {
+            $( "#Airquality_chart_div" ).slideToggle( "fast", function() {
+                drawCharts();
+            });
+        });
+    });
+    </script>
+
+  </head>
+  <body class="container" onload="startTime(); loadJsonData();">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div id="clock"></div>
+          {% block content %}
+          {% endblock %}
+        </div>
+      </div>
+    </div>
+
+
+  </body>
+
+</html>
