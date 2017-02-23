@@ -21,7 +21,8 @@ class ViewController: UIViewController {
         super.viewDidLoad()
     
         loadFromJSON()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        // Create timer fot auto refresh
         _ = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(loadFromJSON), userInfo: nil, repeats: true)
     }
     
@@ -41,6 +42,7 @@ class ViewController: UIViewController {
                 print(error!)
             } else {
                 
+                // Load from JSON
                 do {
                     if let data = data,
                         let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
@@ -63,6 +65,8 @@ class ViewController: UIViewController {
                     print("Error deserializing JSON: \(error)")
                 }
                 
+                // Set loaded values to cards
+                
                 print("Temperatures: \(temperatures) \nHumidites: \(humidities)\nAir quality: \(airQualities)")
                 self.temperatureLabel.text = "Lämpötila on \(temperatures[0])°C"
                 self.humidityLabel.text = "Ilmankosteus on \(humidities[0])%"
@@ -75,9 +79,10 @@ class ViewController: UIViewController {
     
     
     func setAirQuality(airQuality: Double) {
-        // TODO - Create AirQuality filter here.
         
-        if (airQuality < 0.7) {
+        // Show airquality in text instead of ppm.
+        
+        if (airQuality < 0.07) {
             airQualityLabel.text = "Ilmanlaatu on loistava"
         } else if (airQuality < 0.1) {
             airQualityLabel.text = "Ilmanlaatu on hyvä"
