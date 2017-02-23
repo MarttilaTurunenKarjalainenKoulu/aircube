@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Aircube</string>
+    <string name="URL">https://thingspeak.com/channels/180604/feed.json</string>
+
+    <string name="time">Date / Time: </string>
+    <string name="id">Data ID: </string>
+    <string name="temp">Temperature: </string>
+    <string name="hum">Humidity: </string>
+    <string name="aq">Air Quality: </string>
+    <string name="cels">ºC</string>
+    <string name="fah">ºF</string>
+    <string name="perc">%</string>
+    <string name="ppm">ppm</string>
+</resources>
